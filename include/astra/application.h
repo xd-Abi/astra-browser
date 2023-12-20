@@ -1,5 +1,7 @@
 #pragma once
 
+#include <astra/common.h>
+
 namespace Astra {
 
     class Application
@@ -33,8 +35,13 @@ namespace Astra {
         static Application& Get();
 
     private:
-        static Application* s_Instance;
 
+        static Application* s_Instance;
+        static WideChar s_WindowClass[];
+
+    private:
+
+        HINSTANCE m_InstanceHandle;
         bool m_Running;
     };
 }
