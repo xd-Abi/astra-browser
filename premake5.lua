@@ -31,10 +31,8 @@ group 'core'
         }
 
         links {
-            'd3d12.lib',
-            'dxgi.lib',
-            'd3dcompiler.lib',
-            
+            'opengl32.lib',
+
             'imgui'
         }
 

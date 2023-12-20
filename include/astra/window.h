@@ -1,6 +1,8 @@
 #pragma once
 
 #include <astra/common.h>
+#include <astra/graphics.h>
+
 
 namespace Astra {
 
@@ -18,6 +20,11 @@ namespace Astra {
          * @brief Destructor
          */
         ~Window();
+
+        /**
+         * @brief Updates the window buffers.
+         */
+        void OnUpdate();
 
         /**
          * @brief Gets the handle of the window.
@@ -41,5 +48,9 @@ namespace Astra {
         HWND m_Handle;
         uint32 m_Width;
         uint32 m_Height;
+
+        Unique<GraphicsContext> m_GraphicsContext;
+
+        friend class Application;
     };
 }

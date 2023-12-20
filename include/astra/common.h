@@ -4,6 +4,7 @@
 #include <memory>
 #include <string>
 #include <Windows.h>
+#include <Windowsx.h>
 
 /* These are basic types and are supported by almost every compiler and platform */
 

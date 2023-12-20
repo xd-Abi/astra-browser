@@ -26,6 +26,8 @@ namespace Astra {
 			return;
 		}
 
+		m_GraphicsContext = MakeUnique<GraphicsContext>(m_Handle);
+
 		ShowWindow(m_Handle, SW_SHOWNORMAL);
 		UpdateWindow(m_Handle);
 	}
@@ -36,6 +38,11 @@ namespace Astra {
 		{
 			DestroyWindow(m_Handle);
 		}
+	}
+
+	void Window::OnUpdate()
+	{
+		m_GraphicsContext->SwapBuffers();
 	}
 
 	HWND Window::GetHandle() const

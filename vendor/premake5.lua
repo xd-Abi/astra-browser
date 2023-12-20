@@ -16,6 +16,12 @@ project 'imgui'
 		'%{wks.location}/vendor/imgui/imstb_textedit.h',
 		'%{wks.location}/vendor/imgui/imstb_truetype.h',
 		'%{wks.location}/vendor/imgui/imgui_demo.cpp',
+
+		'%{wks.location}/vendor/imgui/backends/imgui_impl_win32.h',
+		'%{wks.location}/vendor/imgui/backends/imgui_impl_win32.cpp',
+		'%{wks.location}/vendor/imgui/backends/imgui_impl_opengl3.h',
+		'%{wks.location}/vendor/imgui/backends/imgui_impl_opengl3_loader.h',
+		'%{wks.location}/vendor/imgui/backends/imgui_impl_opengl3.cpp',
 	}
 
 	includedirs {
