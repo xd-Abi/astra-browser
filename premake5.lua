@@ -26,7 +26,16 @@ group 'core'
         }
 
         includedirs {
-            'include'
+            'include',
+            '%{wks.location}/vendor/imgui/'
+        }
+
+        links {
+            'd3d12.lib',
+            'dxgi.lib',
+            'd3dcompiler.lib',
+            
+            'imgui'
         }
 
         filter 'system:windows'
@@ -41,4 +50,8 @@ group 'core'
             defines 'ASTRA_RELEASE'
             runtime 'Release'
             optimize 'on'
+group ''
+
+group 'vendor'
+    include 'vendor'
 group ''
