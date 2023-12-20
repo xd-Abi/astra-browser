@@ -31,7 +31,7 @@ typedef uint32				char32;
 
 typedef size_t size;
 
-namespace Neon {
+namespace Astra {
 
 	template <typename T>
 	using Unique = std::unique_ptr<T>;
