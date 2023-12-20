@@ -1,7 +1,7 @@
 workspace 'astra'
     architecture 'x86_64'
-    objdir '%{wks.location}/.bin/%{prj.name}/%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}'
-    targetdir '%{wks.location}/.bin/%{prj.name}/%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}'
+    objdir '%{wks.location}/.target/%{prj.name}/%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}'
+    targetdir '%{wks.location}/.target/%{prj.name}/%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}'
     startproject 'astra'
 
     configurations {
