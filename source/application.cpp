@@ -38,6 +38,45 @@ namespace Astra {
 			Close();
 		}
 
+		HRESULT hr = CreateCoreWebView2EnvironmentWithOptions(NULL, NULL, NULL,
+			Microsoft::WRL::Callback< ICoreWebView2CreateCoreWebView2EnvironmentCompletedHandler>(
+				[this](HRESULT result, ICoreWebView2Environment* env) -> HRESULT
+				{
+					RETURN_IF_FAILED(result);
+					m_WebViewEnvironment = env;
+
+					return S_OK;
+				}
+			).Get());
+
+		m_WebViewEnvironment->CreateCoreWebView2Controller(m_Window->GetHandle(),
+			Microsoft::WRL::Callback< ICoreWebView2CreateCoreWebView2ControllerCompletedHandler>(
+				[this](HRESULT result, ICoreWebView2Controller* controller) -> HRESULT {
+
+					if (controller != nullptr)
+					{
+						// @TODO Handle Error
+						m_WebViewController = controller;
+						m_WebViewController->get_CoreWebView2(&m_WebView);
+					}
+
+					wil::com_ptr<ICoreWebView2Settings> settings;
+					m_WebView->get_Settings(&settings);
+					settings->put_IsScriptEnabled(TRUE);
+					settings->put_AreDefaultScriptDialogsEnabled(TRUE);
+					settings->put_IsWebMessageEnabled(TRUE);
+
+					RECT clientRect;
+					GetClientRect(m_Window->GetHandle(), &clientRect);
+
+					clientRect.top = 50;
+					m_WebViewController->put_Bounds(clientRect);
+					m_WebView->Navigate(TEXT("https://google.com"));
+
+					return S_OK;
+				}
+			).Get());
+
 		IMGUI_CHECKVERSION();
 		ImGui::CreateContext();
 		ImGuiIO& io = ImGui::GetIO(); (void)io;
@@ -144,8 +183,6 @@ namespace Astra {
 		break;
 		case WM_NCHITTEST:
 		{
-
-
 			POINT point = { GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) };
 			ScreenToClient(handle, &point);
 
@@ -200,6 +237,7 @@ namespace Astra {
 		}
 		break;
 		case WM_SIZE:
+		{
 			uint32 width = LOWORD(lParam);
 			uint32 height = HIWORD(lParam);
 
@@ -209,9 +247,15 @@ namespace Astra {
 			{
 				app.m_Window->m_Width = width;
 				app.m_Window->m_Height = height;
-			}
 			
-			break;
+				RECT clientRect;
+				GetClientRect(handle, &clientRect);
+
+				clientRect.top = captionThickness;
+				app.m_WebViewController->put_Bounds(clientRect);
+			}
+		}
+		break;
 		}
 
 		return DefWindowProc(handle, message, wParam, lParam);

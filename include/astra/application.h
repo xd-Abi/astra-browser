@@ -3,6 +3,11 @@
 #include <astra/common.h>
 #include <astra/window.h>
 
+#include <WebView2.h>
+#include <wrl.h>
+#include <wil/com.h>
+#include <shlobj.h>
+
 namespace Astra {
 
     class Application
@@ -59,6 +64,10 @@ namespace Astra {
 
         HINSTANCE m_InstanceHandle;
         Unique<Window> m_Window;
+        wil::com_ptr<ICoreWebView2Controller> m_WebViewController;
+        wil::com_ptr<ICoreWebView2> m_WebView;
+        Microsoft::WRL::ComPtr<ICoreWebView2Environment> m_WebViewEnvironment;
+
         bool m_Running;
     };
 }
