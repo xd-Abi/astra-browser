@@ -1,12 +1,44 @@
+use once_cell::unsync::OnceCell;
+use std::mem;
+use std::ptr;
+use std::rc::Rc;
+use webview2::Controller;
 use windows_sys::{
     core::*, Win32::Foundation::*, Win32::Graphics::Gdi::*,
     Win32::System::LibraryLoader::GetModuleHandleA, Win32::UI::WindowsAndMessaging::*,
 };
 
 fn main() {
+    // Check if WebView2 Runtime is available.
+    //
+    // @TODO: Install the WebView2 Runtime if it is not available
+    // on the operating system via rust-http for example.
+    if webview2::get_available_browser_version_string(None).is_err() { 
+        unsafe {
+            MessageBoxA(
+                0,                   
+                s!("WebView2 Runtime is not available!"), 
+                s!("Error"),  
+                MB_OK | MB_ICONERROR | MB_SYSTEMMODAL,
+            );
+        }
+
+        return;
+    }
+
     unsafe {
-        let instance = GetModuleHandleA(std::ptr::null());
-        debug_assert!(instance != 0);
+        let instance = GetModuleHandleA(ptr::null());
+        
+        if instance == 0 {
+            MessageBoxA(
+                0,                   
+                s!("Invalid Instance Handle!"),  
+                s!("Error"), 
+                MB_OK | MB_ICONERROR | MB_SYSTEMMODAL,
+            );
+    
+            return;
+        }
 
         let window_class: *const u8 = s!("AstraWindow");
         let wc = WNDCLASSA {
@@ -19,11 +51,19 @@ fn main() {
             cbWndExtra: 0,
             hIcon: 0,
             hbrBackground: 0,
-            lpszMenuName: std::ptr::null(),
+            lpszMenuName: ptr::null(),
         };
 
-        let atom = RegisterClassA(&wc);
-        debug_assert!(atom != 0);
+        if RegisterClassA(&wc) == 0 {
+            MessageBoxA(
+                0,                   
+                s!("Window Class Registration Failed!"), 
+                s!("Error"), 
+                MB_OK | MB_ICONERROR | MB_SYSTEMMODAL,
+            );
+    
+            return;
+        }
 
         let window = CreateWindowExA(
             0,
@@ -39,6 +79,17 @@ fn main() {
             instance,
             std::ptr::null(),
         );
+
+        if window == 0 {
+            MessageBoxA(
+                0,                   
+                s!("Window Creation Failed!"),   
+                s!("Error"), 
+                MB_OK | MB_ICONERROR | MB_SYSTEMMODAL,
+            );
+    
+            return;
+        }
 
         ShowWindow(window, SW_SHOWNORMAL);
         UpdateWindow(window);
