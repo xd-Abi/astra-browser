@@ -94,6 +94,39 @@ fn main() {
         ShowWindow(window, SW_SHOWNORMAL);
         UpdateWindow(window);
 
+        // Create the webview environment
+        let controller = Rc::new(OnceCell::<Controller>::new());
+        let controller_clone = controller.clone();
+
+        let result = webview2::Environment::builder().build(move |env| {
+            env.unwrap().create_controller(mem::transmute(window), move |controller| {
+                let controller = controller.unwrap();
+                let mut client_rect = mem::zeroed();
+
+                GetClientRect(window, &mut client_rect);
+                controller.put_bounds(mem::transmute(client_rect)).unwrap();
+
+                let web_view = controller.get_webview().unwrap();
+                web_view.navigate("https://www.google.com").unwrap();
+                
+                controller_clone.set(controller).unwrap();
+                SetWindowLongPtrA(window, GWLP_USERDATA, mem::transmute(controller_clone.as_ref()));
+
+                Ok(())
+            })
+        });
+
+        if let Err(_e) = result {
+            MessageBoxA(
+                0,                   
+                s!("Web View Creation Failed!"),   
+                s!("Error"), 
+                MB_OK | MB_ICONERROR | MB_SYSTEMMODAL,
+            );
+    
+            return;
+        }
+
         let mut message = std::mem::zeroed();
 
         while GetMessageA(&mut message, 0, 0, 0) != 0 {
@@ -105,6 +138,21 @@ fn main() {
 extern "system" fn process_message(window: HWND, message: u32, wparam: WPARAM, lparam: LPARAM) -> LRESULT {
     unsafe {
         match message {
+            WM_SIZE => {
+                let user_data = GetWindowLongPtrA(window, GWLP_USERDATA);
+                if user_data != 0 {
+                    let controller: &OnceCell<Controller> = mem::transmute(user_data);
+
+                    if let Some(c) = controller.get() {
+                        let mut client_rect = mem::zeroed();
+                        GetClientRect(window, &mut client_rect);
+
+                        c.put_bounds(mem::transmute(client_rect)).unwrap();
+                    }
+                    
+                }
+              0
+            }
             WM_DESTROY => {
                 PostQuitMessage(0);
                 0

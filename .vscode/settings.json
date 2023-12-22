@@ -1,6 +1,7 @@
 {
   "cSpell.words": [
     "Astra",
+    "GWLP",
     "HREDRAW",
     "HWND",
     "ICONERROR",
@@ -11,7 +12,9 @@
     "OVERLAPPEDWINDOW",
     "SHOWNORMAL",
     "SYSTEMMODAL",
+    "unsync",
     "USEDEFAULT",
+    "USERDATA",
     "VREDRAW",
     "widestring",
     "WNDCLASSA",
