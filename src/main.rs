@@ -8,7 +8,11 @@ use windows_sys::{
     Win32::System::LibraryLoader::GetModuleHandleA, Win32::UI::WindowsAndMessaging::*,
 };
 
+mod app;
+mod layer;
+
 fn main() {
+
     // Check if WebView2 Runtime is available.
     //
     // @TODO: Install the WebView2 Runtime if it is not available
@@ -154,6 +158,12 @@ extern "system" fn process_message(window: HWND, message: u32, wparam: WPARAM, l
               0
             }
             WM_DESTROY => {
+                let mut window_rect = mem::zeroed();
+                if GetWindowRect(window, &mut window_rect) != 0 {
+                    println!("Window Position: ({}, {})", window_rect.left, window_rect.top);
+                    println!("Window Size: {}x{}", window_rect.right - window_rect.left, window_rect.bottom - window_rect.top);    
+                }
+
                 PostQuitMessage(0);
                 0
             }
