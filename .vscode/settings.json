@@ -10,6 +10,7 @@
     "lpsz",
     "LRESULT",
     "OVERLAPPEDWINDOW",
+    "serde",
     "SHOWNORMAL",
     "SYSTEMMODAL",
     "unsync",

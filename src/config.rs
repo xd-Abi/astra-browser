@@ -3,25 +3,25 @@ use serde::Deserialize;
 
 #[derive(Debug, Deserialize)]
 pub struct AppConfig {
-    window: WindowConfig
+    pub window: WindowConfig
 }
 
 #[derive(Debug, Deserialize)]
 pub struct WindowConfig {
-    pos: WindowPositionConfig,
-    size: WindowSizeConfig,
+    pub pos: WindowPositionConfig,
+    pub size: WindowSizeConfig,
 }
 
 #[derive(Debug, Deserialize)]
 pub struct WindowPositionConfig {
-    x: i32,
-    y: i32,
+    pub x: i32,
+    pub y: i32,
 }
 
 #[derive(Debug, Deserialize)]
 pub struct WindowSizeConfig {
-    width: u32,
-    height: u32,
+    pub width: u32,
+    pub height: u32,
 }
 
 impl AppConfig {
